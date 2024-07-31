@@ -18,6 +18,42 @@ void BitcoinExchange::exchange(std::fstream &data, std::fstream &input) {
     this->interpretInput(input);
 }
 
+void BitcoinExchange::extractData(std::fstream &data) {
+    std::string line, tmp1, tmp2;
+    std::getline(data, line);
+    std::istringstream iss(line);
+    if (!line.size() || line.compare("date,exchange_rate"))
+        throw InvalidFormatException();
+    while (std::getline(data, line)){
+        if (this->checkFormat(line, "****-**-**,#") == false)
+            throw InvalidFormatException();
+        iss.str(line);
+        std::getline(iss, tmp1, ',');
+        std::getline(iss, tmp2, '\n');
+        iss.clear();
+        tmp1.erase(std::remove(tmp1.begin(), tmp1.end(), '-'), tmp1.end());
+        int date;
+        try {
+            date = std::stoi(tmp1);
+        }
+        catch (std::exception &e) {
+            throw OutOfBoundsException();
+        }
+        float value;
+        try {
+            value = std::stof(tmp2);
+        }
+        catch (std::exception &e) {
+            throw OutOfBoundsException();
+        }
+        if (value < 0)
+            throw InvalidPriceException();
+        if (checkDate(date) == false)
+            throw InvalidDateException();
+        this->_data[date] = value;
+    }
+}
+
 void BitcoinExchange::interpretInput(std::fstream &input) {
     std::string line, tmp1, tmp2, trash, printDate;
     std::getline(input, line);
@@ -119,42 +155,6 @@ bool BitcoinExchange::checkDate(int date) {
     if ((month == 2 || month == 4 || month == 6 || month == 9 || month == 11) && day > 30)
         return false;
     return true;
-}
-
-void BitcoinExchange::extractData(std::fstream &data) {
-    std::string line, tmp1, tmp2;
-    std::getline(data, line);
-    std::istringstream iss(line);
-    if (!line.size() || line.compare("date,exchange_rate"))
-        throw InvalidFormatException();
-    while (std::getline(data, line)){
-        if (this->checkFormat(line, "****-**-**,#") == false)
-            throw InvalidFormatException();
-        iss.str(line);
-        std::getline(iss, tmp1, ',');
-        std::getline(iss, tmp2, '\n');
-        iss.clear();
-        tmp1.erase(std::remove(tmp1.begin(), tmp1.end(), '-'), tmp1.end());
-        int date;
-        try {
-            date = std::stoi(tmp1);
-        }
-        catch (std::exception &e) {
-            throw OutOfBoundsException();
-        }
-        float value;
-        try {
-            value = std::stof(tmp2);
-        }
-        catch (std::exception &e) {
-            throw OutOfBoundsException();
-        }
-        if (value < 0)
-            throw InvalidPriceException();
-        if (checkDate(date) == false)
-            throw InvalidDateException();
-        this->_data[date] = value;
-    }
 }
 
 const char *InvalidDateException::what() const throw() {
