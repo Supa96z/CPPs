@@ -7,18 +7,23 @@
 # include <string>
 # include <iostream>
 # include <sstream>
+# include <chrono>
+# include <iomanip>
 
 class PmergeMe {
     private:
         std::vector<std::pair<int, int>> _data1;
-        std::vector<int> _small1;
-        std::vector<int> _big1;
         std::deque<std::pair<int, int>> _data2;
-        std::deque<int> _small2;
-        std::deque<int> _big2;
         int _last;
-        void recursiveSort(std::vector<int> &toSort);
-        void merge(std::vector<int> &left, std::vector<int> &right);
+        int _info;
+
+        void parseSequence(int argc, char **argv);
+        void sortWithVec();
+        void sortWithDeq();
+        template<typename T>
+        void recursiveSort(T &toSort);
+        template<typename T>
+        void merge(T &left, T &right, T &merged);
 
     public:
         PmergeMe();
@@ -26,8 +31,8 @@ class PmergeMe {
         PmergeMe &operator=(const PmergeMe &other);
         ~PmergeMe();
 
-        void parseSequence(int argc, char **argv);
-        void sortWithVec();
+        void pMergeMe(int argc, char **argv, int i);
+        int _size;
 };
 
 class ContainsNonDigitException : public std::exception {

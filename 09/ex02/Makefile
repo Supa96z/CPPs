@@ -5,7 +5,7 @@ SOURCES = PmergeMe.cpp\
 
 OBJECTS = $(SOURCES:.cpp=.o)
 
-FLAGS = -Wall -Werror -Wextra -std=c++98 -fsanitize=address
+FLAGS = -Wall -Werror -Wextra -std=c++98
 
 CC = c++ $(FLAGS)
 

@@ -14,49 +14,100 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other) {
 
 PmergeMe::~PmergeMe() {}
 
+void PmergeMe::pMergeMe(int argc, char **argv, int i) {
+    this->_info = i;
+    parseSequence(argc, argv);
+    if (i)
+        sortWithVec();
+    else
+        sortWithDeq();
+}
+
 void PmergeMe::sortWithVec() {
-    std::vector<std::pair<int, int>>::iterator it = this->_data1.begin();
-    for (; it != this->_data1.end(); it++){
+    for (std::vector<std::pair<int, int>>::iterator it = this->_data1.begin(); it != this->_data1.end(); it++){
         if (it->first > it->second){
             int tmp = it->first;
             it->first = it->second;
             it->second = tmp;
         }
     }
-    it = this->_data1.begin();
-    for (; it != this->_data1.end(); it++){
-        this->_small1.push_back(it->first);
-        this->_big1.push_back(it->second);
+    std::vector<int> small;
+    std::vector<int> big;
+    for (std::vector<std::pair<int, int>>::iterator it = this->_data1.begin(); it != this->_data1.end(); it++){
+        small.push_back(it->first);
+        big.push_back(it->second);
     }
     if (this->_last)
-        this->_big1.push_back(this->_last);
+        big.push_back(this->_last);
     this->_data1.clear();
-    recursiveSort(this->_big1);
-    /*for (std::vector<int>::iterator issou = this->_big1.begin(); issou != this->_big1.end(); issou++)
-        std::cout << *issou << std::endl;*/
-    std::cout << this->_big1.size() << std::endl;
+    recursiveSort(big);
+    for (std::vector<int>::iterator it = small.begin(); it != small.end(); it++)
+        big.insert(std::lower_bound(big.begin(), big.end(), *it), *it);
+    if (this->_info == 1){
+        std::cout << "After:  ";
+        for (std::vector<int>::iterator it = big.begin(); it != big.end(); it++)
+            std::cout << *it << " ";
+        std::cout << std::endl;
+    }
 }
 
-void PmergeMe::recursiveSort(std::vector<int> &toSort) {
+void PmergeMe::sortWithDeq() {
+    for (std::deque<std::pair<int, int>>::iterator it = this->_data2.begin(); it != this->_data2.end(); it++){
+        if (it->first > it->second){
+            int tmp = it->first;
+            it->first = it->second;
+            it->second = tmp;
+        }
+    }
+    std::deque<int> small;
+    std::deque<int> big;
+    for (std::deque<std::pair<int, int>>::iterator it = this->_data2.begin(); it != this->_data2.end(); it++){
+        small.push_back(it->first);
+        big.push_back(it->second);
+    }
+    if (this->_last)
+        big.push_back(this->_last);
+    this->_data2.clear();
+    recursiveSort(big);
+    for (std::deque<int>::iterator it = small.begin(); it != small.end(); it++)
+        big.insert(std::lower_bound(big.begin(), big.end(), *it), *it);
+}
+
+template<typename T>
+void PmergeMe::recursiveSort(T &toSort) {
     if (toSort.size() <= 1)
         return;
     int mid = toSort.size() / 2;
-    std::vector<int> left(toSort.begin(), toSort.begin() + mid);
-    std::vector<int> right(toSort.begin() + mid, toSort.end());
+    T left(toSort.begin(), toSort.begin() + mid);
+    T right(toSort.begin() + mid, toSort.end());
     recursiveSort(left);
     recursiveSort(right);
-    merge(left, right);
+    T merged;
+    merge(left, right, merged);
+    toSort = std::move(merged);
 }
 
-void PmergeMe::merge(std::vector<int> &left, std::vector<int> &right) {
-    std::vector<int>::iterator it1 = left.begin();
-    std::vector<int>::iterator it2 = right.begin();
-    while (it2++ != right.end())
-        left.insert(std::lower_bound(left.begin(), left.end(), *it2), *it2);
-    if (left.size() == this->_big1.size()){
-        this->_big1.clear();
-        for (; it1 != left.end(); it1++)
-            this->_big1.push_back(*it1);
+template<typename T>
+void PmergeMe::merge(T &left, T &right, T &merged) {
+    typename T::iterator it1 = left.begin();
+    typename T::iterator it2 = right.begin();
+    while (it1 != left.end() && it2 != right.end()){
+        if (*it1 <= *it2){
+            merged.push_back(*it1);
+            ++it1;
+        }
+        else {
+            merged.push_back(*it2);
+            ++it2;
+        }
+    }
+    while (it1 != left.end()){
+        merged.push_back(*it1);
+        ++it1;
+    }
+    while (it2 != right.end()){
+        merged.push_back(*it2);
+        ++it2;
     }
 }
 
@@ -128,6 +179,18 @@ void PmergeMe::parseSequence(int argc, char **argv) {
         }
         if (hasFirst && !hasBoth)
             this->_last = nb1;
+    }
+    this->_size = this->_data1.size() * 2;
+    if (this->_last)
+        this->_size += 1;
+    if (this->_info == 1){
+        std::vector<std::pair<int, int>>::iterator it = this->_data1.begin();
+        std::cout << "Before: ";
+        for (; it != this->_data1.end(); it++)
+            std::cout << it->first << " " << it->second << " ";
+        if (this->_last)
+            std::cout << this->_last << " ";
+        std::cout << std::endl;
     }
 }
 
