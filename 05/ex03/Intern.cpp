@@ -5,9 +5,12 @@
 
 Intern::Intern() {}
 
-Intern::Intern(const Intern &i) {}
+Intern::Intern(const Intern &i) {(void)i;}
 
-Intern &Intern::operator=(const Intern &i) { return (*this); }
+Intern &Intern::operator=(const Intern &i) {
+    (void)i;
+    return (*this);
+}
 
 Intern::~Intern() {}
 
