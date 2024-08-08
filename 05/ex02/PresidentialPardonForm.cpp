@@ -4,7 +4,11 @@ PresidentialPardonForm::PresidentialPardonForm() : AForm("Unknown", 25, 5) {}
 
 PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &p) : AForm(p.getName(), p.getGradeSign(), p.getGradeExec()), _target(p._target) {}
 
-PresidentialPardonForm &PresidentialPardonForm::operator=(const PresidentialPardonForm &p) { return (*this); }
+PresidentialPardonForm &PresidentialPardonForm::operator=(const PresidentialPardonForm &p) {
+    if (this != &p)
+        this->_target = p._target;
+    return (*this);
+}
 
 PresidentialPardonForm::~PresidentialPardonForm() {}
 

@@ -4,7 +4,13 @@ Bureaucrat::Bureaucrat() : _name("John Doe"), _grade(150) {}
 
 Bureaucrat::Bureaucrat(const Bureaucrat &b) : _name(b._name), _grade(b._grade) {}
 
-Bureaucrat &Bureaucrat::operator=(const Bureaucrat &b) { return (*this); }
+Bureaucrat &Bureaucrat::operator=(const Bureaucrat &b) {
+    if (this != &b){
+        this->_name = b._name;
+        this->_grade = b._grade;
+    }
+    return *this;
+}
 
 Bureaucrat::Bureaucrat(std::string name, int grade) : _name(name), _grade(grade){
     if (grade > MIN_GRADE)

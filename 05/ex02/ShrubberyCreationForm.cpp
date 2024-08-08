@@ -4,7 +4,11 @@ ShrubberyCreationForm::ShrubberyCreationForm() : AForm("Unknown", 145, 137) {}
     
 ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &s) : AForm(s.getName(), s.getGradeSign(), s.getGradeExec()), _target(s._target) {}
 
-ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationForm &s) { return (*this); }
+ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationForm &s) {
+    if (this != &s)
+        this->_target = s._target;
+    return (*this);
+}
 
 ShrubberyCreationForm::~ShrubberyCreationForm() {}
 

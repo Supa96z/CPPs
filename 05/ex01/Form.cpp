@@ -5,7 +5,15 @@ Form::Form() : _name("Unknown"), _gradeSign(150), _gradeExec(150), _formSigned(f
 
 Form::Form(const Form &f) : _name(f._name), _gradeSign(f._gradeSign), _gradeExec(f._gradeExec), _formSigned(f._formSigned) {}
 
-Form &Form::operator=(const Form &f) { return (*this); }
+Form &Form::operator=(const Form &f){
+    if (this != &f){
+        this->_name = f._name;
+        this->_gradeSign = f._gradeSign;
+        this->_gradeExec = f._gradeExec;
+        this->_formSigned = f._formSigned;
+    }
+    return *this;
+}
 
 Form::Form(std::string name, int gradeSign, int gradeExec) : _name(name), _gradeSign(gradeSign), _gradeExec(gradeExec), _formSigned(false) {
     if (gradeSign > MIN_GRADE || gradeExec > MIN_GRADE)

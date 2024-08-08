@@ -4,7 +4,11 @@ RobotomyRequestForm::RobotomyRequestForm() : AForm("Unknown", 72, 45) {}
 
 RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &r) : AForm(r.getName(), r.getGradeSign(), r.getGradeExec()), _target(r._target) {}
 
-RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &r) { return (*this); }
+RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &r) {
+    if (this != &r)
+        this->_target = r._target;
+    return (*this);
+}
 
 RobotomyRequestForm::~RobotomyRequestForm() {}
 

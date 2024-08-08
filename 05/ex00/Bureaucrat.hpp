@@ -15,11 +15,11 @@ class Bureaucrat
     std::string _name;
 
     class GradeTooHighException : public std::exception {
-        const char * what() const throw () {}
+        const char * what() const throw ();
     } GradeTooHigh;
 
     class GradeTooLowException : public std::exception {
-        const char * what() const throw() {}
+        const char * what() const throw();
     } GradeTooLow;
 
     public:

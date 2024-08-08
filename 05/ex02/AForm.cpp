@@ -5,7 +5,15 @@ AForm::AForm() : _name("Unknown"), _gradeSign(150), _gradeExec(150), _formSigned
 
 AForm::AForm(const AForm &f) : _name(f._name), _gradeSign(f._gradeSign), _gradeExec(f._gradeExec), _formSigned(f._formSigned) {}
 
-AForm &AForm::operator=(const AForm &f) { return (*this); }
+AForm &AForm::operator=(const AForm &f) {
+    if (this != &f){
+        this->_name = f._name;
+        this->_gradeSign = f._gradeSign;
+        this->_gradeExec = f._gradeExec;
+        this->_formSigned = f._formSigned;
+    }
+    return (*this);
+}
 
 AForm::~AForm() {}
 

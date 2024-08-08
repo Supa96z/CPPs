@@ -15,9 +15,9 @@ class AForm
 {
     private:
         std::string _name;
-        bool _formSigned;
         int _gradeSign;
         int _gradeExec;
+        bool _formSigned;
 
     public:
         /* OCCF */
