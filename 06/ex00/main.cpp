@@ -2,5 +2,5 @@
 
 int main()
 {
-    ScalarConverter::convert("nan");
+    ScalarConverter::convert("0.000001351354351351");
 }

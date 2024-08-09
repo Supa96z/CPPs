@@ -2,9 +2,9 @@
 
 ScalarConverter::ScalarConverter() {}
 
-ScalarConverter::ScalarConverter(const ScalarConverter &s) {}
+ScalarConverter::ScalarConverter(const ScalarConverter &s) { (void)s; }
 
-ScalarConverter &ScalarConverter::operator=(const ScalarConverter &s) { return (*this); }
+ScalarConverter &ScalarConverter::operator=(const ScalarConverter &s) { (void)s; return (*this); }
 
 ScalarConverter::~ScalarConverter() {}
 
@@ -12,8 +12,6 @@ void ScalarConverter::convert(std::string str)
 {
     /* Takes care of special literals*/
     int i = 0;
-    double d1;
-    double f1;
     std::string s[5]={"nan", "+inf", "-inf", "+inff", "-inff"};
 
     while (i < 5 && s[i].compare(str))
@@ -22,18 +20,13 @@ void ScalarConverter::convert(std::string str)
     {
         std::cout << "char : impossible" << std::endl;
         std::cout << "int : impossible" << std::endl;
-        if (i < 3)
-        {
-            d1 = std::stod(str);
-            f1 = static_cast<float>(d1);
+        if (i > 2){
+        std::cout << "float : " << s[i - 2] << "f" << std::endl;
+        std::cout << "double : " << s[i - 2] << std::endl;
+        } else {
+        std::cout << "float : " << s[i] << "f" << std::endl;
+        std::cout << "double : " << s[i] << std::endl;
         }
-        else
-        {
-            f1 = std::stof(str);
-            d1 = static_cast<double>(f1);
-        }
-        std::cout << "float : " << f1 << "f" << std::endl;
-        std::cout << "double : " << d1 << std::endl;
         exit(0);
     }
 
@@ -68,8 +61,10 @@ void ScalarConverter::convert(std::string str)
                 if (i != -1 && str[i] == 'f')
                 {
                     i = str.find_first_not_of("0123456789", ++i);
-                    if (i == -1)
+                    if (i == -1){
+                        db = false;
                         fl = true;
+                    }
                     if (i != -1)
                     {
                         std::cout << "Wrong format" << std::endl;
@@ -90,6 +85,27 @@ void ScalarConverter::convert(std::string str)
         }
     }
 
+    /* Get ammount of digits to get real size for setprecision */
+
+    int size = 0;
+    std::string::iterator st = str.begin();
+    if (*st == '+' || *st == '-')
+        ++st;
+    for (; *st == '0' && st != str.end(); st++);
+    for (; std::isdigit(*st) && st != str.end(); st++)
+        size++;
+    if (*st == '.'){
+        ++st;
+        for (; std::isdigit(*st) && st != str.end(); st++)
+            size++;
+    }
+    int fsize = size;
+    int dsize = size;
+    if (size > 7)
+        fsize = 7;
+    if (size > 16)
+        dsize = 16;
+
     /* Convert, cast and print */
     i = 0;
     double d;
@@ -98,21 +114,17 @@ void ScalarConverter::convert(std::string str)
     bool displayableChar = false;
     bool overflowF = false;
     bool overflowI = false;
+    std::stringstream ss(str);
     if (db == true) // From double literal in string
     {
-        try
-        {
-            d = std::stod(str);
-        }
-        catch (std::exception& e)
-        {
+        ss >> d;
+        if (ss.fail()){
             std::cout << "Exception: out of range for a literal type double." << std::endl;
             exit(1);
         }
         if (d < (-std::numeric_limits<float>::max()) || d > std::numeric_limits<float>::max())
             overflowF = true;
-        else
-        {
+        else{
             f = static_cast<float>(d);
             if (d < (-std::numeric_limits<int>::max() - 1) || d > std::numeric_limits<int>::max())
                 overflowI = true;
@@ -127,35 +139,29 @@ void ScalarConverter::convert(std::string str)
             std::cout << "char: undisplayable" << std::endl;
         else
             std::cout << "char: " << c << std::endl;
-        if (overflowF == true)
-        {
+        if (overflowF == true){
             std::cout << "int: overflow" << std::endl;
             std::cout << "float: overflow" << std::endl;
         }
-        else
-        {
+        else{
             if (overflowI == true)
                 std::cout << "int: overflow" << std::endl;
             else
                 std::cout << "int: " << i << std::endl;
             if (std::fmod(f, 1.0) == 0 && f > -1000000 && f < 1000000)
-                std::cout << "float: " << f << ".0f" << std::endl;
+                std::cout << "float: " << std::setprecision(fsize) << f << ".0f" << std::endl;
             else
                 std::cout << "float: " << f << "f" << std::endl;
         }
         if (std::fmod(d, 1.0) == 0 && d > -1000000 && d < 1000000)
-            std::cout << "double: " << d << ".0" << std::endl;
+            std::cout << "double: " << std::setprecision(dsize) << d << ".0" << std::endl;
         else
             std::cout << "double: " << d << std::endl;
     }
     else if (fl == true) // From float literal in string
     {
-        try
-        {
-            f = std::stof(str);
-        }
-        catch(const std::exception& e)
-        {
+        ss >> f;
+        if (ss.fail()){
             std::cerr << "Exception: out of range of a literal type float." << std::endl;
             exit(1);
         }
@@ -184,22 +190,19 @@ void ScalarConverter::convert(std::string str)
             else
                 std::cout << "int: " << i << std::endl;
             if (std::fmod(f, 1.0) == 0 && f > -1000000 && f < 1000000)
-                std::cout << "float: " << f << ".0f" << std::endl;
+                std::cout << "float: " << std::setprecision(fsize) << f << ".0f" << std::endl;
             else
                 std::cout << "float: " << f << "f" << std::endl;
         }
         if (std::fmod(d, 1.0) == 0 && d > -1000000 && d < 1000000)
-            std::cout << "double: " << d << ".0" << std::endl;
+            std::cout << "double: " << std::setprecision(dsize) << d << ".0" << std::endl;
         else
             std::cout << "double: " << d << std::endl;
     }
     else if (it == true) // From int in string
     {
-        try
-        {
-            i = std::stoi(str);
-        }
-        catch(const std::exception& e)
+        ss >> i;
+        if (ss.fail())
         {
             std::cerr << "Exception: out of range of a literal type int." << std::endl;
             exit(1);
@@ -226,12 +229,12 @@ void ScalarConverter::convert(std::string str)
             else
                 std::cout << "int: " << i << std::endl;
             if (std::fmod(f, 1.0) == 0 && f > -1000000 && f < 1000000)
-                std::cout << "float: " << f << ".0f" << std::endl;
+                std::cout << "float: " << std::setprecision(fsize) << f << ".0f" << std::endl;
             else
                 std::cout << "float: " << f << "f" << std::endl;
         }
         if (std::fmod(d, 1.0) == 0 && d > -1000000 && d < 1000000)
-            std::cout << "double: " << d << ".0" << std::endl;
+            std::cout << "double: " << std::setprecision(dsize) << d << ".0" << std::endl;
         else
             std::cout << "double: " << d << std::endl;
     }

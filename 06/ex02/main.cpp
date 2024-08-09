@@ -2,6 +2,7 @@
 #include "A.hpp"
 #include "B.hpp"
 #include "C.hpp"
+#include <typeinfo>
 #include <stdlib.h>
 #include <iostream>
 #include <ctime>
@@ -16,7 +17,7 @@ Base* generate(void)
         case 2:
             return new C();
         default:
-            return nullptr;
+            return NULL;
     }
 }
 
@@ -24,9 +25,9 @@ void identify(Base* p)
 {
     if (dynamic_cast<A*>(p))
         std::cout << "Type A." << std::endl;
-    else if (dynamic_cast<B*>(p) != nullptr)
+    else if (dynamic_cast<B*>(p) != NULL)
         std::cout << "Type B." << std::endl;
-    else if (dynamic_cast<C*>(p) != nullptr)
+    else if (dynamic_cast<C*>(p) != NULL)
         std::cout << "Type C." << std::endl;
     else 
         std::cout << "Type unknown." << std::endl;
@@ -37,19 +38,19 @@ void identify(Base &p) {
         (void)dynamic_cast<A&>(p);
         std::cout << "Type A." << std::endl;
         return;
-    } catch (const std::bad_cast&) {}
+    } catch (const std::bad_cast& e) {}
 
     try {
         (void)dynamic_cast<B&>(p);
         std::cout << "Type B." << std::endl;
         return;
-    } catch (const std::bad_cast&) {}
+    } catch (const std::bad_cast& e) {}
 
     try {
         (void)dynamic_cast<C&>(p);
         std::cout << "Type C." << std::endl;
         return;
-    } catch (const std::bad_cast&) {}
+    } catch (const std::bad_cast& e) {}
 
     std::cout << "Type unknown." << std::endl;
 }
