@@ -4,7 +4,7 @@ Span::Span() : _data() {}
 
 Span::Span(const Span& s) : _data(s._data) {}
 
-Span &Span::operator=(const Span& s) { return *this; }
+Span &Span::operator=(const Span& s) { (void)s; return *this; }
 
 Span::~Span() {}
 
@@ -44,7 +44,7 @@ int Span::longestSpan() {
 }
 
 void Span::addRange(std::vector<int>::iterator from, std::vector<int>::iterator to) {
-	if (static_cast<int>(to - from + this->_data.size()) > this->_sizeMax)
+	if (static_cast<unsigned int>(to - from + this->_data.size()) > this->_sizeMax)
 		throw SpanClassAlreadyFullException();
 	this->_data.insert(this->_data.end(), from, to);
 }

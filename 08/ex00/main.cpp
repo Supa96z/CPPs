@@ -18,11 +18,11 @@ int main(){
 
 	try{
 	int n = 7;
-	std::forward_list<int> flst;
+	std::deque<int> flst;
 	for (int i = 1; i <= 30; i *= 2)
 		flst.push_front(i);
 	std::cout << "List goes like this: ";
-	for (std::forward_list<int>::iterator it = flst.begin(); it != flst.end(); it++)
+	for (std::deque<int>::iterator it = flst.begin(); it != flst.end(); it++)
 		std::cout << *it << " ";
 	std::cout << std::endl;
 	easyfind(flst, n);
