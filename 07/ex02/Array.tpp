@@ -4,7 +4,7 @@
 # include "Array.hpp"
 
 template <class T>
-Array<T>::Array() : _data(nullptr), _size(0) {}
+Array<T>::Array() : _data(NULL), _size(0) {}
 
 template <class T>
 Array<T>::Array(unsigned int n) : _data(new T[n]()), _size(n) {}
@@ -43,7 +43,7 @@ std::size_t Array<T>::size() const {
 
 template <class T>
 void Array<T>::copydata(const T* source, T* destination, std::size_t size){
-	for (std::size_t i; i < size; i++)
+	for (std::size_t i = 0; i < size; i++)
 		destination[i] = source[i];
 }
 

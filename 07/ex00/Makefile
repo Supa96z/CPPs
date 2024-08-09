@@ -6,10 +6,13 @@ OBJECTS = $(SOURCES:.cpp=.o)
 
 FLAGS = -Wall -Werror -Wextra -std=c++98
 
-CC = c++ $(FLAGS)
+CC = c++
 
 $(NAME) : $(OBJECTS)
-	@$(CC) -o $(NAME) $(OBJECTS)
+	@$(CC) $(FLAGS) -o $(NAME) $(OBJECTS)
+
+%.o: %.cpp
+	@$(CC) $(FLAGS) -c $< -o $@
 
 all : $(NAME)
 
