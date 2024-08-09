@@ -10,7 +10,7 @@ int main(int argc, char **argv){
     PmergeMe fj;
 
     clock_t start = clock();
-    try { fj.pMergeMe(argc, argv, 1); } catch (std::exception &e) { std::cerr << e.what() << std::endl; }
+    try { fj.pMergeMe(argc, argv, 1); } catch (std::exception &e) { std::cerr << e.what() << std::endl; exit(1); }
 
     clock_t end = clock();
     double time_taken = double(end - start) / CLOCKS_PER_SEC * 1e6;
@@ -20,7 +20,7 @@ int main(int argc, char **argv){
 
     start = clock();
 
-    try { fj.pMergeMe(argc, argv, 0); } catch (std::exception &e) { std::cerr << e.what() << std::endl; }
+    try { fj.pMergeMe(argc, argv, 0); } catch (std::exception &e) { std::cerr << e.what() << std::endl; exit(1); }
 
     end = clock();
     time_taken = double(end - start) / CLOCKS_PER_SEC * 1e6;
