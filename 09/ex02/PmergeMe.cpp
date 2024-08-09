@@ -24,7 +24,7 @@ void PmergeMe::pMergeMe(int argc, char **argv, int i) {
 }
 
 void PmergeMe::sortWithVec() {
-    for (std::vector<std::pair<int, int>>::iterator it = this->_data1.begin(); it != this->_data1.end(); it++){
+    for (std::vector<std::pair<int, int> >::iterator it = this->_data1.begin(); it != this->_data1.end(); it++){
         if (it->first > it->second){
             int tmp = it->first;
             it->first = it->second;
@@ -33,7 +33,7 @@ void PmergeMe::sortWithVec() {
     }
     std::vector<int> small;
     std::vector<int> big;
-    for (std::vector<std::pair<int, int>>::iterator it = this->_data1.begin(); it != this->_data1.end(); it++){
+    for (std::vector<std::pair<int, int> >::iterator it = this->_data1.begin(); it != this->_data1.end(); it++){
         small.push_back(it->first);
         big.push_back(it->second);
     }
@@ -52,7 +52,7 @@ void PmergeMe::sortWithVec() {
 }
 
 void PmergeMe::sortWithDeq() {
-    for (std::deque<std::pair<int, int>>::iterator it = this->_data2.begin(); it != this->_data2.end(); it++){
+    for (std::deque<std::pair<int, int> >::iterator it = this->_data2.begin(); it != this->_data2.end(); it++){
         if (it->first > it->second){
             int tmp = it->first;
             it->first = it->second;
@@ -61,7 +61,7 @@ void PmergeMe::sortWithDeq() {
     }
     std::deque<int> small;
     std::deque<int> big;
-    for (std::deque<std::pair<int, int>>::iterator it = this->_data2.begin(); it != this->_data2.end(); it++){
+    for (std::deque<std::pair<int, int> >::iterator it = this->_data2.begin(); it != this->_data2.end(); it++){
         small.push_back(it->first);
         big.push_back(it->second);
     }
@@ -84,7 +84,8 @@ void PmergeMe::recursiveSort(T &toSort) {
     recursiveSort(right);
     T merged;
     merge(left, right, merged);
-    toSort = std::move(merged);
+    toSort.clear();
+    toSort.insert(toSort.end(), merged.begin(), merged.end());
 }
 
 template<typename T>
@@ -129,20 +130,25 @@ void PmergeMe::parseSequence(int argc, char **argv) {
         std::istringstream iss(seq);
         while (std::getline(iss, n, ' ')){
             std::string::iterator it1 = n.begin();
+            std::stringstream ss(n);
             if (!std::isdigit(*it1))
                 throw TooManySpacesException();
             if (!hasFirst){
-                try { nb1 = std::stoi(n); } catch (std::exception &e) { throw OutOfBoundsException(); }
+                ss >> nb1;
+                if (ss.fail())
+                    throw OutOfBoundsException();
                 hasFirst = true;
             }
             else {
-                try { nb2 = std::stoi(n); } catch (std::exception &e) { throw OutOfBoundsException(); }
+                ss >> nb2;
+                if (ss.fail())
+                    throw OutOfBoundsException();
                 hasFirst = false;
                 hasBoth = true;
             }
             if (hasBoth){
-                this->_data1.emplace_back(nb1, nb2);
-                this->_data2.emplace_back(nb1, nb2);
+                this->_data1.push_back(std::make_pair(nb1, nb2));
+                this->_data2.push_back(std::make_pair(nb1, nb2));
                 hasBoth = false;
             }
         }
@@ -158,22 +164,27 @@ void PmergeMe::parseSequence(int argc, char **argv) {
         for (int i = 0; argv[i]; i++){
             seq = argv[i];
             std::string::iterator it = seq.begin();
+            std::stringstream ss(seq);
             for (; it != seq.end(); it++){
                 if (!std::isdigit(*it))
                     throw ContainsNonDigitException();
             }
             if (!hasFirst){
-                try { nb1 = std::stoi(seq); } catch (std::exception &e) { throw OutOfBoundsException(); }
+                ss >> nb1;
+                if (ss.fail())
+                    throw OutOfBoundsException();
                 hasFirst = true;
             }
             else {
-                try { nb2 = std::stoi(seq); } catch (std::exception &e) { throw OutOfBoundsException(); }
+                ss >> nb2;
+                if (ss.fail())
+                    throw OutOfBoundsException();
                 hasFirst = false;
                 hasBoth = true;
             }
             if (hasBoth){
-                this->_data1.emplace_back(nb1, nb2);
-                this->_data2.emplace_back(nb1, nb2);
+                this->_data1.push_back(std::make_pair(nb1, nb2));
+                this->_data2.push_back(std::make_pair(nb1, nb2));
                 hasBoth = false;
             }
         }
@@ -184,7 +195,7 @@ void PmergeMe::parseSequence(int argc, char **argv) {
     if (this->_last)
         this->_size += 1;
     if (this->_info == 1){
-        std::vector<std::pair<int, int>>::iterator it = this->_data1.begin();
+        std::vector<std::pair<int, int> >::iterator it = this->_data1.begin();
         std::cout << "Before: ";
         for (; it != this->_data1.end(); it++)
             std::cout << it->first << " " << it->second << " ";

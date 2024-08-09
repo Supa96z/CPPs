@@ -33,19 +33,15 @@ void BitcoinExchange::extractData(std::fstream &data) {
         iss.clear();
         tmp1.erase(std::remove(tmp1.begin(), tmp1.end(), '-'), tmp1.end());
         int date;
-        try {
-            date = std::stoi(tmp1);
-        }
-        catch (std::exception &e) {
+        std::stringstream ss1(tmp1);
+        ss1 >> date;
+        if (ss1.fail())
             throw OutOfBoundsException();
-        }
         float value;
-        try {
-            value = std::stof(tmp2);
-        }
-        catch (std::exception &e) {
+        std::stringstream ss2(tmp2);
+        ss2 >> value;
+        if (ss2.fail())
             throw OutOfBoundsException();
-        }
         if (value < 0)
             throw InvalidPriceException();
         if (checkDate(date) == false)
@@ -73,18 +69,16 @@ void BitcoinExchange::interpretInput(std::fstream &input) {
         printDate = tmp1;
         tmp1.erase(std::remove(tmp1.begin(), tmp1.end(), '-'), tmp1.end());
         int date;
-        try {
-            date = std::stoi(tmp1);
-        }
-        catch (std::exception &e) {
+        std::stringstream ss1(tmp1);
+        ss1 >> date;
+        if (ss1.fail()) {
             std::cout << "Error: bad input => " << line << std::endl;
             continue;
         }
         float value;
-        try {
-            value = std::stof(tmp2);
-        }
-        catch (std::exception &e) {
+        std::stringstream ss2(tmp2);
+        ss2 >> value;
+        if (ss2.fail()) {
             std::cout << "Error: bad input => " << line << std::endl;
             continue;
         }

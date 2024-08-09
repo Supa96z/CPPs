@@ -23,7 +23,10 @@ void RPN::result(std::string &equation) {
     for (; it != equation.end(); it++){
         if ((*it == '-' && std::isdigit(*(it + 1))) || std::isdigit(*it)){
             std::getline(iss, n, ' ');
-            this->_data.push(std::stoi(n));
+            std::stringstream ss(n);
+            int zob;
+            ss >> zob;
+            this->_data.push(zob);
             it += n.size();
         }
         else if (op.find(*it) != std::string::npos){
@@ -66,12 +69,18 @@ bool RPN::checkEquation(std::string &equation) {
         }
         if (*it == '-' && std::isdigit(*(it + 1))){
             std::getline(iss, n, ' ');
-            try { nb = std::stoi(n); } catch (std::exception &e){ return false; }
+            std::stringstream ss(n);
+            ss >> nb;
+            if (ss.fail())
+                return false;
             it += n.size();
         }
         else if (std::isdigit(*it)){
                 std::getline(iss, n, ' ');
-                try { nb = std::stoi(n); } catch (std::exception &e) { return false; }
+                std::stringstream ss(n);
+                ss >> nb;
+                if (ss.fail())
+                    return false;
                 it += n.size();
         }
         else if (op.find(*it) != std::string::npos)

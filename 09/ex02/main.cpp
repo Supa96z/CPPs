@@ -9,22 +9,21 @@ int main(int argc, char **argv){
 
     PmergeMe fj;
 
-    auto t1 = std::chrono::high_resolution_clock::now();
-
+    clock_t start = clock();
     try { fj.pMergeMe(argc, argv, 1); } catch (std::exception &e) { std::cerr << e.what() << std::endl; }
 
-    auto t2 = std::chrono::high_resolution_clock::now();
-    const std::chrono::duration<double, std::micro> time = t2 - t1;
+    clock_t end = clock();
+    double time_taken = double(end - start) / CLOCKS_PER_SEC * 1e6;
 
-    std::cout << "Time to process a range of " << fj._size << " elements with std::vector : " << std::fixed << std::setprecision(5) << time.count() << " µs" << std::endl;
+    std::cout << "Time to process a range of " << fj._size << " elements with std::vector : " << std::fixed << std::setprecision(5) << time_taken << " µs" << std::endl;
 
 
-    t1 = std::chrono::high_resolution_clock::now();
+    start = clock();
 
     try { fj.pMergeMe(argc, argv, 0); } catch (std::exception &e) { std::cerr << e.what() << std::endl; }
 
-    t2 = std::chrono::high_resolution_clock::now();
-    const std::chrono::duration<double, std::micro> time2 = t2 - t1;
+    end = clock();
+    time_taken = double(end - start) / CLOCKS_PER_SEC * 1e6;
 
-    std::cout << "Time to process a range of " << fj._size << " elements with std::deque : " << std::fixed << std::setprecision(5) << time2.count() << " µs" << std::endl;
+    std::cout << "Time to process a range of " << fj._size << " elements with std::deque : " << std::fixed << std::setprecision(5) << time_taken << " µs" << std::endl;
 }

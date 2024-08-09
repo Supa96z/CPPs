@@ -7,13 +7,12 @@
 # include <string>
 # include <iostream>
 # include <sstream>
-# include <chrono>
 # include <iomanip>
 
 class PmergeMe {
     private:
-        std::vector<std::pair<int, int>> _data1;
-        std::deque<std::pair<int, int>> _data2;
+        std::vector<std::pair<int, int> > _data1;
+        std::deque<std::pair<int, int> > _data2;
         int _last;
         int _info;
 
