@@ -2,7 +2,6 @@
 #include "A.hpp"
 #include "B.hpp"
 #include "C.hpp"
-#include <typeinfo>
 #include <stdlib.h>
 #include <iostream>
 #include <ctime>
@@ -35,22 +34,22 @@ void identify(Base* p)
 
 void identify(Base &p) {
     try {
-        (void)dynamic_cast<A&>(p);
+        A a = dynamic_cast<A&>(p);
         std::cout << "Type A." << std::endl;
         return;
-    } catch (const std::bad_cast& e) {}
+    } catch (const std::exception& e) { (void)e; }
 
     try {
-        (void)dynamic_cast<B&>(p);
+        B b = dynamic_cast<B&>(p);
         std::cout << "Type B." << std::endl;
         return;
-    } catch (const std::bad_cast& e) {}
+    } catch (const std::exception& e) { (void)e; }
 
     try {
-        (void)dynamic_cast<C&>(p);
+        C c = dynamic_cast<C&>(p);
         std::cout << "Type C." << std::endl;
         return;
-    } catch (const std::bad_cast& e) {}
+    } catch (const std::exception& e) { (void)e; }
 
     std::cout << "Type unknown." << std::endl;
 }
