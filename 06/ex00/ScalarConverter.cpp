@@ -30,6 +30,24 @@ void ScalarConverter::convert(std::string str)
         exit(0);
     }
 
+    /* Check for single char */
+
+    bool isChar = false;
+    std::string::iterator ch = str.begin();
+    if (str.length() == 1 && (*ch > 32 && *ch < 127)){
+        std::cout << "char : " << *ch << std::endl;
+        int c;
+        float h;
+        double a;
+        c = static_cast<int>(*ch);
+        h = static_cast<float>(*ch);
+        a = static_cast<double>(*ch);
+        std::cout << "int : " << c << std::endl;
+        std::cout << "float : " << h << ".0f" << std::endl;
+        std::cout << "double : " << a << ".0" << std::endl;
+        isChar = true;
+    }
+
     /* Check format for the right conversion and cast */
     bool db = false;
     bool fl = false;
@@ -41,7 +59,7 @@ void ScalarConverter::convert(std::string str)
         it = true;
     else
     {
-        if (i == 0 && (str[i] != '+' && str[i] != '-')){
+        if (i == 0 && (str[i] != '+' && str[i] != '-') && isChar == false){
             std::cout << "Wrong format" << std::endl;
             exit(1);
         }
@@ -77,9 +95,10 @@ void ScalarConverter::convert(std::string str)
                     exit(1);
                 }
             }
-            else if (i != -1)
+            else if (i != -1 && isChar == false)
             {
                 std::cout << "Wrong format" << std::endl;
+            std::cout << "here" << std::endl;
                 exit(1);
             }
         }
